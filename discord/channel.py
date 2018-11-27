@@ -79,11 +79,14 @@ class Channel(Hashable):
         If :attr:`type` is not :attr:`ChannelType.voice` then this is always an empty array.
     user_limit : int
         The channel's limit for number of members that can be in a voice channel.
+    rate_limit_per_user: int
+        The amount of seconds a user has to wait before sending another message (0-120);
+        bots, as well as users with the permission manage_messages or manage_channel, are unaffected.
     """
 
     __slots__ = [ 'voice_members', 'name', 'id', 'server', 'topic', 'position',
                   'is_private', 'type', 'bitrate', 'user_limit',
-                  '_permission_overwrites' ]
+                  '_permission_overwrites', 'rate_limit_per_user']
 
     def __init__(self, **kwargs):
         self._update(**kwargs)
@@ -102,6 +105,7 @@ class Channel(Hashable):
         self.bitrate = kwargs.get('bitrate')
         self.type = kwargs.get('type')
         self.user_limit = kwargs.get('user_limit')
+        self.rate_limit_per_user = kwargs.get('rate_limit_per_user', 0)
         try:
             self.type = ChannelType(self.type)
         except:
